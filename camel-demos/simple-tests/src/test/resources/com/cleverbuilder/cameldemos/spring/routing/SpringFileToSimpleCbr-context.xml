@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://camel.apache.org/schema/spring https://camel.apache.org/schema/spring/camel-spring-3.0.0.xsd
+    ">
+
+  <camelContext xmlns="http://camel.apache.org/schema/spring">
+
+    <route>
+      <from uri="direct:process-file"/>
+      <choice>
+        <when>
+          <simple>${bodyAs(String)} contains 'Cilla Black'</simple>
+          <log message="Received a file!"/>
+          <to uri="file:target/files/output/cilla_black"/>
+        </when>
+      </choice>
+    </route>
+
+    <route>
+      <from uri="file:target/files/input"/>
+      <log message="Received a file!"/>
+      <to uri="direct:process-file"/>
+    </route>
+  </camelContext>
+
+</beans>
